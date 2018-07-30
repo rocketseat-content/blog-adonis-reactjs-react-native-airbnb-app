@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { StatusBar } from 'react-native';
+import { StatusBar, AsyncStorage } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
 
 import api from '../../services/api';
@@ -57,10 +57,12 @@ export default class SignIn extends Component {
           password: this.state.password,
         });
 
+        await AsyncStorage.setItem('@AirBnbApp:token', response.data.token);
+
         const resetAction = StackActions.reset({
           index: 0,
           actions: [
-            NavigationActions.navigate({ routeName: 'Main', params: { token: response.data.token } }),
+            NavigationActions.navigate({ routeName: 'Main' }),
           ],
         });
         this.props.navigation.dispatch(resetAction);

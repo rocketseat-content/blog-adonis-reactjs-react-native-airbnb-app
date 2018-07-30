@@ -1,3 +1,4 @@
+import './config/ReactotronConfig';
 import React from 'react';
 
 import MapboxGL from '@mapbox/react-native-mapbox-gl';
