@@ -137,6 +137,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-camera')
     compile project(':@mapbox_react-native-mapbox-gl') {
         compile ('com.squareup.okhttp3:okhttp:3.6.0') {
             force = true

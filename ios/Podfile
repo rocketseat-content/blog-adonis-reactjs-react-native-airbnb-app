@@ -25,6 +25,8 @@ target 'AirBnbApp' do
 
   pod 'react-native-mapbox-gl', :path => '../node_modules/@mapbox/react-native-mapbox-gl'
 
+  pod 'react-native-camera', :path => '../node_modules/react-native-camera'
+
   target 'AirBnbAppTests' do
     inherit! :search_paths
     # Pods for testing
