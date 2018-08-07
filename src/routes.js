@@ -8,6 +8,8 @@ const Routes = createStackNavigator({
   SignIn,
   SignUp,
   Main,
+}, {
+  initialRouteName: 'Main',
 });
 
 export default Routes;

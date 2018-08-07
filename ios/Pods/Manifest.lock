@@ -1,6 +1,14 @@
 PODS:
   - React (0.56.0):
     - React/Core (= 0.56.0)
+  - react-native-camera (1.1.4):
+    - React
+    - react-native-camera/RCT (= 1.1.4)
+    - react-native-camera/RN (= 1.1.4)
+  - react-native-camera/RCT (1.1.4):
+    - React
+  - react-native-camera/RN (1.1.4):
+    - React
   - react-native-mapbox-gl (6.1.2-beta2):
     - React
   - React/Core (0.56.0):
@@ -44,7 +52,8 @@ PODS:
   - yoga (0.56.0.React)
 
 DEPENDENCIES:
-  - react-native-mapbox-gl (from `../node_modules/@mapbox/react-native-mapbox-gl`)
+  - react-native-camera (from `../node_modules/react-native-camera`)
+  - "react-native-mapbox-gl (from `../node_modules/@mapbox/react-native-mapbox-gl`)"
   - React/Core (from `../node_modules/react-native`)
   - React/DevSupport (from `../node_modules/react-native`)
   - React/RCTActionSheet (from `../node_modules/react-native`)
@@ -65,17 +74,20 @@ DEPENDENCIES:
 
 EXTERNAL SOURCES:
   React:
-    :path: ../node_modules/react-native
+    :path: "../node_modules/react-native"
+  react-native-camera:
+    :path: "../node_modules/react-native-camera"
   react-native-mapbox-gl:
-    :path: ../node_modules/@mapbox/react-native-mapbox-gl
+    :path: "../node_modules/@mapbox/react-native-mapbox-gl"
   yoga:
-    :path: ../node_modules/react-native/ReactCommon/yoga/Yoga.podspec
+    :path: "../node_modules/react-native/ReactCommon/yoga/Yoga.podspec"
 
 SPEC CHECKSUMS:
   React: 1fe0eb13d90b625d94c3b117c274dcfd2e760e11
+  react-native-camera: ab22041dcf0403d88f2ae4b9ea3ed2644e680423
   react-native-mapbox-gl: b42480060cdcc515dfa3d8e403fb4dd32466a1b9
   yoga: b1ce48b6cf950b98deae82838f5173ea7cf89e85
 
-PODFILE CHECKSUM: 7b4e64fea2673be1f20799ac2947c0265714bb7b
+PODFILE CHECKSUM: bdf68c6ef1de9c325af7dc540f38c74320259ea0
 
-COCOAPODS: 1.4.0
+COCOAPODS: 1.5.3

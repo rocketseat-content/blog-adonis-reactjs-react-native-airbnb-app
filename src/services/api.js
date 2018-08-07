@@ -18,6 +18,6 @@ api.interceptors.request.use(async (config) => {
   } catch (err) {
     alert(err);
   }
-})
+});
 
 export default api;

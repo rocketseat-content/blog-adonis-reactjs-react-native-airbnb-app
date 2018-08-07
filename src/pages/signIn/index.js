@@ -67,6 +67,7 @@ export default class SignIn extends Component {
         });
         this.props.navigation.dispatch(resetAction);
       } catch (_err) {
+        console.tron.log(_err);
         this.setState({ error: 'Houve um problema com o login, verifique suas credenciais!' });
       }
     }
