@@ -30,7 +30,7 @@ export default class SignIn extends Component {
   };
 
   state = {
-    email: 'cso.junior1996@gmail.com',
+    email: 'claudio@rocketseat.com.br',
     password: '123456',
     error: '',
   };

@@ -33,7 +33,7 @@ export default class SignUp extends Component {
 
   state = {
     username: 'csorlandi',
-    email: 'cso.junior1996@gmail.com',
+    email: 'claudio@rocketseat.com.br',
     password: '123456',
     error: '',
     success: '',

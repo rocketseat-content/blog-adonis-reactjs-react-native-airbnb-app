@@ -75,8 +75,8 @@ const ModalContainer = styled.View`
 const ModalImagesListContainer = styled.View``;
 
 const ModalImagesList = styled.ScrollView`
-  paddingHorizontal: 10px;
-  paddingTop: 10px;
+  paddingHorizontal: 20px;
+  paddingTop: 20px;
 `;
 
 const ModalImageItem = styled.Image`
@@ -128,6 +128,47 @@ const TakePictureButtonLabel = styled.View`
   backgroundColor: #fc6663;
 `;
 
+const DataButtonsWrapper = styled.View`
+  flex: 1;
+  alignItems: center;
+  justifyContent: center;
+  paddingHorizontal: 20px;
+`;
+
+const MarkerContainer = styled.View`
+  width: 30px;
+  height: 30px;
+  alignItems: center;
+  justifyContent: center;
+  backgroundColor: #FFF;
+  borderRadius: 15px;
+`;
+
+const MarkerLabel = styled.View`
+  width: 24px;
+  height: 24px;
+  borderRadius: 12px;
+  backgroundColor: #7159C1;
+`;
+
+const Form = styled.View`
+  flex: 1;
+  marginTop: 20px;
+`;
+
+const Input = styled.TextInput`
+  paddingHorizontal: 20px;
+  paddingVertical: 10px;
+  borderRadius: 5px;
+  backgroundColor: #FFF;
+  alignSelf: stretch;
+  marginBottom: 10px;
+  marginHorizontal: 20px;
+  fontSize: 14px;
+  borderWidth: 1px;
+  borderColor: #CCC;
+`;
+
 
 export {
   Container,
@@ -149,4 +190,9 @@ export {
   ContinueButtonText,
   TakePictureButtonContainer,
   TakePictureButtonLabel,
+  DataButtonsWrapper,
+  MarkerContainer,
+  MarkerLabel,
+  Form,
+  Input,
 };

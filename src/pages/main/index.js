@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { StatusBar, Modal } from 'react-native';
+import { StatusBar, Modal, AsyncStorage } from 'react-native';
 
 import MapboxGL from '@mapbox/react-native-mapbox-gl';
 
@@ -28,6 +28,11 @@ import {
   ContinueButtonText,
   TakePictureButtonContainer,
   TakePictureButtonLabel,
+  DataButtonsWrapper,
+  MarkerContainer,
+  MarkerLabel,
+  Form,
+  Input,
 } from './styles';
 
 export default class Main extends Component {
@@ -45,14 +50,18 @@ export default class Main extends Component {
         latitude: null,
         longitude: null,
       },
-      name: '',
-      price: '',
-      address: '',
+      name: 'Rocketseat',
+      price: '10000',
+      address: 'Rua zero, 0',
       images: [],
     },
   };
 
-  async componentDidMount() {
+  componentDidMount() {
+    this.getLocation();
+  }
+
+  getLocation = async () => {
     try {
       const response = await api.get('/properties', {
         params: {
@@ -106,6 +115,76 @@ export default class Main extends Component {
           data,
         ]
       }})
+    }
+  }
+
+  handleNameChange = name => {
+    const { realtyData } = this.state;
+    this.setState({ realtyData: {
+      ...realtyData,
+      name,
+    }});
+  }
+
+  handleAddressChange = address => {
+    const { realtyData } = this.state;
+    this.setState({ realtyData: {
+      ...realtyData,
+      address,
+    }});
+  }
+
+  handlePriceChange = price => {
+    const { realtyData } = this.state;
+    this.setState({ realtyData: {
+      ...realtyData,
+      price,
+    }});
+  }
+
+  saveRealty = async () => {
+    try {
+      const {
+        realtyData: {
+          name,
+          address,
+          price,
+          location: {
+            latitude,
+            longitude
+          },
+          images
+        }
+      } = this.state;
+
+      const newRealtyResponse = await api.post('/properties', {
+        title: name,
+        address,
+        price,
+        latitude: Number(latitude.toFixed(6)),
+        longitude: Number(longitude.toFixed(6)),
+      });
+
+      const imagesData = new FormData();
+
+      images.forEach((image, index) => {
+        imagesData.append('image', {
+          uri: image.uri,
+          type: 'image/jpeg',
+          name: `${newRealtyResponse.data.title}_${index}.jpg`
+        });
+      });
+
+      await api.post(
+        `/properties/${newRealtyResponse.data.id}/images`,
+        imagesData,
+      );
+
+      this.getLocation()
+      this.handleDataModalClose()
+      this.setState({ newRealty: false });
+    } catch (err) {
+      console.tron.log(err);
     }
   }
 
@@ -197,10 +276,75 @@ export default class Main extends Component {
     </Modal>
   )
 
+  renderDataModal = () => (
+    <Modal
+      visible={this.state.dataModalOpened}
+      transparent={false}
+      animationType="slide"
+      onRequestClose={this.handleDataModalClose}
+    >
+      <ModalContainer>
+        <ModalContainer>
+          <MapboxGL.MapView
+            centerCoordinate={[
+              this.state.realtyData.location.longitude,
+              this.state.realtyData.location.latitude
+            ]}
+            style={{ flex: 1 }}
+            styleURL={MapboxGL.StyleURL.Dark}
+          >
+            <MapboxGL.PointAnnotation
+              id="center"
+              coordinate={[
+                this.state.realtyData.location.longitude,
+                this.state.realtyData.location.latitude
+              ]}
+            >
+              <MarkerContainer>
+                <MarkerLabel />
+              </MarkerContainer>
+            </MapboxGL.PointAnnotation>
+          </MapboxGL.MapView>
+        </ModalContainer>
+        { this.renderImagesList() }
+        <Form>
+          <Input
+            placeholder="Nome do Imóvel"
+            value={this.state.realtyData.name}
+            onChangeText={this.handleNameChange}
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
+          <Input
+            placeholder="Endereço"
+            value={this.state.realtyData.address}
+            onChangeText={this.handleAddressChange}
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
+          <Input
+            placeholder="Preço"
+            value={this.state.realtyData.price}
+            onChangeText={this.handlePriceChange}
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
+        </Form>
+        <DataButtonsWrapper>
+          <SelectButtonContainer onPress={this.saveRealty}>
+            <ButtonText>Salvar Imóvel</ButtonText>
+          </SelectButtonContainer>
+          <CancelButtonContainer onPress={this.handleDataModalClose}>
+            <ButtonText>Cancelar</ButtonText>
+          </CancelButtonContainer>
+        </DataButtonsWrapper>
+      </ModalContainer>
+    </Modal>
+  )
+
   render() {
     return (
       <Container>
-        { console.tron.log(this.state) }
         <StatusBar barStyle="light-content" />
         <MapboxGL.MapView
           centerCoordinate={[-49.6446024, -27.2108001]}
@@ -213,6 +357,7 @@ export default class Main extends Component {
         { this.renderConditionalsButtons() }
         { this.renderMarker() }
         { this.renderCameraModal() }
+        { this.renderDataModal() }
       </Container>
     );
   }
