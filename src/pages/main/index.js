@@ -118,28 +118,28 @@ export default class Main extends Component {
     }
   }
 
-  handleNameChange = name => {
+  handleInputChange = (index, value) => {
     const { realtyData } = this.state;
-    this.setState({ realtyData: {
-      ...realtyData,
-      name,
-    }});
-  }
-
-  handleAddressChange = address => {
-    const { realtyData } = this.state;
-    this.setState({ realtyData: {
-      ...realtyData,
-      address,
-    }});
-  }
-
-  handlePriceChange = price => {
-    const { realtyData } = this.state;
-    this.setState({ realtyData: {
-      ...realtyData,
-      price,
-    }});
+    switch (index) {
+      case 'name':
+        this.setState({ realtyData: {
+          ...realtyData,
+          name: value,
+        }});
+        break;
+      case 'address':
+        this.setState({ realtyData: {
+          ...realtyData,
+          address: value,
+        }});
+        break;
+      case 'price':
+        this.setState({ realtyData: {
+          ...realtyData,
+          price: value,
+        }});
+        break;
+    }
   }
 
   saveRealty = async () => {
@@ -220,9 +220,8 @@ export default class Main extends Component {
   )
 
   renderMarker = () => (
-    this.state.newRealty && !this.state.cameraModalOpened ? (
+    this.state.newRealty && !this.state.cameraModalOpened &&
       <Marker resizeMode="contain" source={require('../../images/marker.png')} />
-    ) : null
   )
 
   renderImagesList = () => (
@@ -311,21 +310,21 @@ export default class Main extends Component {
           <Input
             placeholder="Nome do Imóvel"
             value={this.state.realtyData.name}
-            onChangeText={this.handleNameChange}
+            onChangeText={name => this.handleInputChange('name', name)}
             autoCapitalize="none"
             autoCorrect={false}
           />
           <Input
             placeholder="Endereço"
             value={this.state.realtyData.address}
-            onChangeText={this.handleAddressChange}
+            onChangeText={address => this.handleInputChange('address', address)}
             autoCapitalize="none"
             autoCorrect={false}
           />
           <Input
             placeholder="Preço"
             value={this.state.realtyData.price}
-            onChangeText={this.handlePriceChange}
+            onChangeText={price => this.handleInputChange('price', price)}
             autoCapitalize="none"
             autoCorrect={false}
           />
