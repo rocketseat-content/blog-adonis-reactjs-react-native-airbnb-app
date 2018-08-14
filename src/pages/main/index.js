@@ -33,6 +33,14 @@ import {
   MarkerLabel,
   Form,
   Input,
+  DetailsModalFirstDivision,
+  DetailsModalSecondDivision,
+  DetailsModalThirdDivision,
+  DetailsModalBackButton,
+  DetailsModalPrice,
+  DetailsModalRealtyTitle,
+  DetailsModalRealtySubTitle,
+  DetailsModalRealtyAddress,
 } from './styles';
 
 export default class Main extends Component {
@@ -45,6 +53,8 @@ export default class Main extends Component {
     newRealty: false,
     cameraModalOpened: false,
     dataModalOpened: false,
+    detailsModalOpened: false,
+    realtyDetailed: null,
     realtyData: {
       location: {
         latitude: null,
@@ -83,6 +93,11 @@ export default class Main extends Component {
   handleDataModalClose = () => this.setState({
     dataModalOpened: !this.state.dataModalOpened,
     cameraModalOpened: false,
+  })
+
+  handleDetailsModalClose = index => this.setState({
+    detailsModalOpened: !this.state.detailsModalOpened,
+    realtyDetailed: index,
   })
 
   handleGetPositionPress = async () => {
@@ -206,15 +221,15 @@ export default class Main extends Component {
   )
 
   renderLocations = () => (
-    this.state.locations.map(location => (
+    this.state.locations.map((location, index) => (
       <MapboxGL.PointAnnotation
         id={location.id.toString()}
         coordinate={[parseFloat(location.longitude), parseFloat(location.latitude)]}
+        key={location.id.toString()}
       >
         <AnnotationContainer>
-          <AnnotationText>{location.price}</AnnotationText>
+          <AnnotationText onPress={() => this.handleDetailsModalClose(index) }>{location.price}</AnnotationText>
         </AnnotationContainer>
-        <MapboxGL.Callout title={location.title} />
       </MapboxGL.PointAnnotation>
     ))
   )
@@ -225,7 +240,7 @@ export default class Main extends Component {
   )
 
   renderImagesList = () => (
-    this.state.realtyData.images.length !== 0 ? (
+    this.state.realtyData.images.length !== 0 && (
       <ModalImagesListContainer>
         <ModalImagesList horizontal>
           { this.state.realtyData.images.map(image => (
@@ -233,7 +248,21 @@ export default class Main extends Component {
           ))}
         </ModalImagesList>
       </ModalImagesListContainer>
-    ) : null
+    )
+  )
+
+  renderDetailsImagesList = () => (
+    this.state.detailsModalOpened && (
+      <ModalImagesList horizontal>
+        { this.state.locations[this.state.realtyDetailed].images.map(image => (
+          <ModalImageItem
+            key={image.id}
+            source={{ uri: `http://10.0.3.2:3333/images/${image.path}` }}
+            resizeMode="stretch"
+          />
+        ))}
+      </ModalImagesList>
+    )
   )
 
   renderCameraModal = () => (
@@ -341,6 +370,45 @@ export default class Main extends Component {
     </Modal>
   )
 
+  renderDetailsModal = () => (
+    <Modal
+      visible={this.state.detailsModalOpened}
+      transparent={false}
+      animationType="slide"
+      onRequestClose={this.handleDetailsModalClose}
+    >
+      <ModalContainer>
+        <DetailsModalFirstDivision>
+          <DetailsModalBackButton onPress={() => this.handleDetailsModalClose(null)}>
+            Voltar
+          </DetailsModalBackButton>
+        </DetailsModalFirstDivision>
+        <DetailsModalSecondDivision>
+          <DetailsModalRealtyTitle>
+            {this.state.detailsModalOpened
+              ? this.state.locations[this.state.realtyDetailed].title
+              : ''
+            }
+          </DetailsModalRealtyTitle>
+          <DetailsModalRealtySubTitle>Casa mobiliada com 3 quartos + quintal</DetailsModalRealtySubTitle>
+          <DetailsModalRealtyAddress>
+            {this.state.detailsModalOpened
+              ? this.state.locations[this.state.realtyDetailed].address
+              : ''
+            }
+          </DetailsModalRealtyAddress>
+          { this.renderDetailsImagesList() }
+        </DetailsModalSecondDivision>
+        <DetailsModalThirdDivision>
+          <DetailsModalPrice>R$ {this.state.detailsModalOpened
+            ? this.state.locations[this.state.realtyDetailed].price
+            : 0
+          }</DetailsModalPrice>
+        </DetailsModalThirdDivision>
+      </ModalContainer>
+    </Modal>
+  )
+
   render() {
     return (
       <Container>
@@ -357,6 +425,7 @@ export default class Main extends Component {
         { this.renderMarker() }
         { this.renderCameraModal() }
         { this.renderDataModal() }
+        { this.renderDetailsModal() }
       </Container>
     );
   }
